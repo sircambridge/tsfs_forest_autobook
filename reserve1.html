@@ -1,0 +1,706 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-tw" lang="zh-tw" dir="ltr" >
+<head>
+	<title>->線上訂房_step7</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<link rel="stylesheet" href="../cache/css3.css">  
+	<script language="javascript" src="../js/count_checkbox.js"></script>
+	<script language="javascript" src="../js/jquery1.6.2.js"></script>
+	<link href="../js/ui-lightness/jquery-ui-1.8.16.custom.css" rel="stylesheet" type="text/css" />
+	<script language="javascript" src="../js/jquery-ui-1.8.16.custom.min.js"></script>
+	<script language="javascript" src="../js/jquery.ui.datepicker-zh-TW.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+
+function font1()
+{
+  $("table").css("font-size","15px");
+  $("td").css("font-size","15px");
+  $("th").css("font-size","15px");
+}
+
+function font2()
+{
+  $("table").css("font-size","17px");
+  $("td").css("font-size","17px");
+  $("th").css("font-size","17px");
+}
+
+function font3()
+{
+  $("table").css("font-size","19px");
+  $("td").css("font-size","19px");
+  $("th").css("font-size","19px");
+}
+$(function(){
+	$(".slider").hover(function(){
+		var img = $(this).attr("src");
+	var img2 = $(this).parent().parent().parent().parent().parent().parent().parent().parent().find(".slide_pic_order");
+
+		 img2.attr("src",img);
+		 	 img2.hide();
+			 img2.delay(500).fadeIn();
+	});
+		   
+		   });
+</script>
+<div id="mainstyle">
+	<div id="allcontent">
+		<div id="head">
+			<div id="head_left">
+				<div id="head_left_type">
+					<ul class="type">
+						<!--<li class="head_left_1">
+							<a href="#" tabindex="1" title="中文">中文</a></li>
+						<li class="head_left_1">
+							<a href="index.php?code=list&flag=detail&ids=57&article_id=72" tabindex="2" target="_blank" title="English">English</a></li>-->
+						<li class="head_left_1">
+							<a href="http://dongshih.forest.gov.tw" tabindex="3" target="_blank" title="東勢林區管理處">回東勢林管處</a></li>
+						<li class="head_left_1">
+							<a href="index.php?act=sitemap" tabindex="4" title="網站地圖">網站地圖</a></li>
+						<li class="head_left_1">
+							<a href="index.php?code=list&amp;ids=1" tabindex="5" title="回首頁">回首頁</a></li>
+						<!--<li class="head_left_1">
+							<a href="index.php?act=epaper" tabindex="6" title="訂閱電子報">訂閱電子報</a></li>-->
+						<li class="head_left_1">
+							<a href="#" onclick="this.style.behavior='url(#default#homepage)';this.setHomePage('http://lab.dboem.com/forestbooking/cht/index.php?');" tabindex="7" title="設為首頁">設為首頁</a></li>
+						<li class="head_left_1">
+							<a href="javascript:window.external.AddFavorite ('http://lab.dboem.com/market','國家森林遊樂區網路訂房系統--首頁')" tabindex="8" title="加到我的最愛">加到我的最愛</a></li>
+                        <li class="head_left_1">
+                            <a href="https://forestpass.welcometw.com/"
+                                tabindex="9" title="遊樂區門票電子票證">遊樂區門票電子票證</a></li>
+                    </ul>
+				</div>
+				<div id="login_in">
+					歡迎使用網路訂房系統，<span><a href="index.php?act=resveration&code=login">登入/加入會員</a></span><div style="color: red;background: rgba(255, 255, 255, 0.4);font-weight: bold;text-align: right;" >目前系統時間 <span id="time"><span></div><div style="color: red;background: rgba(255, 255, 255, 0.4);font-weight: bold; text-align:right;line-height: 18px;padding-right: 4px;">(若長時間未使用<br>本系統，請按重<br>新整理更新時間)</div></div>
+			</div>
+			<div id="seek">
+				<div id="seek_search">
+					<form action="./index.php?act=article&amp;code=search" method="post" name="frm">
+	<table border="0" cellpadding="0" cellspacing="0" width="10%">
+		<tbody>
+			<tr>
+				<td align="left" nowrap="nowrap" valign="middle">
+					<table border="0" cellpadding="0" cellspacing="0" width="10%">
+						<tbody>
+							<tr>
+								<td>
+									<input accesskey="S" id="keyword" name="keyword" onfocus="if (this.value=='請輸入欲檢索之字串') {this.value='';}" size="25" tabindex="3" type="text" value="請輸入欲檢索之字串" /></td>
+							</tr>
+						</tbody>
+					</table>
+				</td>
+				<td align="left" style="padding-left: 5px" valign="middle" width="1%">
+					<label for="keyword"><input alt="搜尋" name="action" src="../upload/cht/webstyle_default/search.gif" tabindex="3" type="image" /></label></td>
+				<!--<td align="left" valign="middle" width="1%">
+								<a href="index.php?act=article&code=adsearch"><img alt="進階搜尋" border="0" src="../upload/cht/webstyle_default/se05.jpg" /></a></td>
+							<td align="left" valign="middle" width="1%">
+								<a href="index.php?act=article_class"><img alt="分類檢索" border="0" src="../upload/cht/webstyle_default/se06.jpg" /></a></td>-->
+			</tr>
+		</tbody>
+	</table>
+</form>
+<p>
+	&nbsp;</p>
+</div>
+				<a href="index.php?" tabindex="9" title="國家森林遊樂區網路訂房系統"><img alt="國家森林遊樂區網路訂房系統" border="0" id="img1" name="img1" src="../upload/cht/webstyle_default/logo_01.png" /></a> <a href="index.php?" tabindex="10" title="國家森林遊樂區網路訂房系統"><img border="0" id="img2" name="img2" src="../upload/cht/webstyle_default/logo_02.png" /></a></div>
+		</div>
+		<div id="content">
+			<script>
+$(function(){
+		   $(".mytr:odd").css("background-color","#EEF4E1");
+		   });
+</script>
+<style type="text/css">
+<!--
+#inbtn {
+	float: left;
+	height: 515px;
+	width: 161px;
+	padding-top: 15px;
+	padding-left: 50px;
+	position: relative;
+}
+#title_bg {
+	background-image: url(../upload/cht/webstyle_default/intitlebg.jpg);
+	height: 48px;
+	width: 771px;
+	padding-left: 5px;
+}
+.titlebg_a {
+	padding-top: 10px;
+}
+#incontent {
+	height: auto;
+	width: 776px;
+float: right;
+}
+#title_list {
+	margin-top: 7px;
+	margin-left: 21px;
+	height: 30px;
+	line-height: 30px;
+
+	color: #069;
+}
+#incontent_all {
+	margin-top: 15px;
+	position: relative;
+	margin-left: 70px;
+}
+.titlestyle_b {
+
+	color: #069;
+}
+.ordernew {
+	background-image: url(../upload/cht/webstyle_default/ordernew_title.jpg);
+	background-repeat: no-repeat;
+	height: 22px;
+	width: 134px;
+	padding-left: 27px;
+	padding-top: 3px;
+}
+.ordernew_2 {
+	height: 5px;
+}
+.ordernew_3 {
+	width: 161px;
+	font-size: 15px;
+}
+.ordernew_4 {
+	background-image: url(../upload/cht/webstyle_default/ordernew_bg.jpg);
+	background-repeat: repeat-y;
+	background-position: 0px top;
+	line-height: 23px;
+	height: 23px;
+}
+.ordernew_5 {
+	color: #2F7DF9;
+	line-height: 20px;
+	padding-left: 7px;
+	padding-top: 2px;
+}
+.ordernew_6 {
+	color: #999;
+	padding-left: 7px;
+	height: 23px;
+	line-height: 23px;
+	padding-top: 2px;
+}
+.ordernewfont {
+	font-size: 15px;
+}
+
+
+.order_new_room_header {
+	background-image: url(../upload/cht/webstyle_default/order_new_title.jpg);
+	background-repeat: no-repeat;
+	height: 31px;
+	width: 611px;
+	font-size: 21px;
+	color: #FFF;
+	padding-top: 18px;
+	padding-left: 15px;
+}
+.order_new_room_center {
+	background-image: url(../upload/cht/webstyle_default/order_new_center.jpg);
+	background-repeat:repeat-y;
+}
+
+.order_new_room_buttom {
+	background-image:url(../upload/cht/webstyle_default/order_new_buttom.jpg);
+	background-repeat:no-repeat;
+	height: 10px;
+
+}
+.order_new_room_1 {
+	padding-top: 30px;
+	padding-bottom: 20px;
+}
+.order_new_room_1 input{
+	border: 1px solid #D5D5D5;
+	background-color: #FDF4EA;
+}
+.order_new_room_2 {
+	padding-top: 15px;
+	padding-bottom: 20px;
+}
+.fotonlin_2 {
+	height:5px;
+	background-color: #E69191;
+	color: #FFF;
+
+}
+.fotonlin_3 {
+	height: 27px;
+	line-height: 27px;
+	background-color: #f7dcdc;
+	color: #4F4E4A;
+	width: 100px;
+
+	border-bottom-width: 1px;
+	border-bottom-style: double;
+	border-bottom-color: #666;
+	padding-left: 5px;
+}
+.fotonlin_3a {
+	height: 27px;
+	line-height: 27px;
+	background-color: #B1C5F7;
+	color: #333;
+	width: 257px;
+}
+.fotonlin_4 {
+	height: 27px;
+	line-height: 27px;
+	background-color: #fef8f8;
+	color: #7a7770;
+
+	border-bottom-width: 1px;
+	border-bottom-style: double;
+	border-bottom-color: #666;
+	padding-left: 5px;
+}
+.fotonlin_5 {
+	height:5px;
+	background-color: #85CC24;
+	color: #FFF;
+	
+}
+.fotonlin_6 {
+	background-color: #69C;
+	color: #FFF;
+
+		height:28px;
+	line-height: 28px;
+}
+.fotonlin_7 {
+	padding-top: 12px;
+}
+.fotonlin_8 {
+	padding-top: 8px;
+}
+.mytd {
+	height: 27px;
+	line-height: 27px;
+	color: #7a7770;
+
+	border-bottom-width: 1px;
+	border-bottom-style: double;
+	border-bottom-color: #666;
+	padding-left: 5px;
+}
+.fotonlin_3_1 {
+	height: 27px;
+	line-height: 27px;
+	background-color: #f7dcdc;
+	color: #4F4E4A;
+
+	border-bottom-width: 1px;
+	border-bottom-style: double;
+	border-bottom-color: #666;
+	padding-left: 5px;
+}
+.fotonlin_4_2 {
+	height: 27px;
+	line-height: 27px;
+	background-color: #fef8f8;
+	color: #7a7770;
+
+	padding-left: 5px;
+}
+.menubook_05_03 {
+	color:#F00;
+
+	line-height: 27px;
+	padding-left: 15px;
+}
+.menubook_05_02 {
+	
+	padding-top:15px;
+	padding-left:15px;
+}
+.fotonlin_3_2 {
+	height: 27px;
+	line-height: 27px;
+	background-color: #f7dcdc;
+	color: #4F4E4A;
+
+
+	border-bottom-width: 1px;
+	border-bottom-style: double;
+	border-bottom-color: #666;
+	padding-left: 5px;
+}
+.menubook_05_05 {
+	padding-left:30px;
+	color:#545454;
+
+	line-height: 23px;
+}
+.clearbookstyle{
+	margin:0;
+	padding-top:5px;
+	list-style-type:none;
+	letter-spacing: 1px;
+	}
+	.fotonlin_color_1 {
+	background-color: #F38556;
+	color: #FFF;
+	font-size: 17px;
+	border-bottom-width: 1px;
+	border-bottom-style: double;
+	border-bottom-color: #900;
+}
+.fotonlin_color_2 {
+	background-color: #cbd0d6;
+	color: #000;
+	
+}
+.fotonlin_color_3 {
+	height: 27px;
+	line-height: 27px;
+	background-color: #FFF;
+	color: #4F4E4A;
+	
+	border-bottom-width: 1px;
+	border-bottom-style: double;
+	border-bottom-color: #666;
+	padding-left: 5px;
+}
+.forbook_width{
+	width:590px;
+	}
+-->
+</style>
+<div id="inbtn">
+	<table border="0" cellpadding="0" cellspacing="0" class="ordernewfont">
+		<tbody>
+			<tr>
+				<td class="ordernew" scope="col">
+					訂房流程</td>
+			</tr>
+			<tr>
+				<td class="ordernew_2" scope="row">
+					</td>
+			</tr>
+			<tr>
+		  <td class="ordernew_3" scope="row">
+					<table bgcolor="#c6c3c3" border="0" cellpadding="0" cellspacing="1" width="100%">
+						<tbody>
+							<tr>
+								<td bgcolor="#f9f9f9">
+									<table align="center" border="0" cellpadding="0" cellspacing="0" width="90%">
+										<tbody>
+											<tr>
+												<td class="ordernew_2" scope="col">
+													</td>
+												<td scope="col">
+													</td>
+											</tr>
+											<tr>
+												<td class="ordernew_4" width="1%">
+													<img src="../upload/cht/webstyle_default/ordernew_6.jpg" /></td>
+												<td class="ordernew_6" scope="col">
+													輸入帳號密碼</td>
+											</tr>
+											<tr>
+												<td class="ordernew_4" scope="row">
+													<img src="../upload/cht/webstyle_default/ordernew_6.jpg" /></td>
+												<td class="ordernew_6">
+													確認會員資料</td>
+											</tr>
+											<tr>
+												<td class="ordernew_4" scope="row">
+													<img src="../upload/cht/webstyle_default/ordernew_6.jpg" /></td>
+												<td class="ordernew_6">
+													選擇森林遊樂區</td>
+											</tr>
+											<tr>
+												<td class="ordernew_4" scope="row">
+													<img alt="" src="../upload/cht/webstyle_default/ordernew_6.jpg" /></td>
+												<td class="ordernew_6">
+													選擇專案</td>
+											</tr>
+											<tr>
+												<td class="ordernew_4" scope="row">
+													<img src="../upload/cht/webstyle_default/ordernew_6.jpg" /></td>
+												<td class="ordernew_6">
+													選擇入住日期</td>
+											</tr>
+											<tr>
+												<td class="ordernew_4" scope="row">
+													<img src="../upload/cht/webstyle_default/ordernew_6.jpg" /></td>
+												<td class="ordernew_6">
+													選擇房型</td>
+											</tr>
+											<tr>
+												<td class="ordernew_4" scope="row">
+													<img src="../upload/cht/webstyle_default/ordernew_5.jpg" /></td>
+												<td class="ordernew_5">
+													確認訂單</td>
+											</tr>
+											<tr>
+												<td class="ordernew_4" scope="row">
+													<img src="../upload/cht/webstyle_default/ordernew_6.jpg" /></td>
+												<td class="ordernew_6">
+													完成</td>
+											</tr>
+											<tr>
+												<td class="ordernew_2" scope="row">&nbsp;
+													</td>
+												<td>&nbsp;
+													</td>
+											</tr>
+										</tbody>
+									</table>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+<div id="incontent">
+	<div id="title_bg">
+		<table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tbody>
+				<tr>
+					<td class="titlebg_a" scope="col" width="1%">
+						<img src="../upload/cht/webstyle_default/titlebutton_03.jpg" /></td>
+					<td align="right" class="titlebg_a" scope="col">
+						<table border="0" cellpadding="0" cellspacing="0" width="10%">
+	<tbody>
+		<tr>
+			<td align="left" valign="middle" width="1%">
+				<img alt="" src="../upload/cht/webstyle_default/word.jpg" /></td>
+			<td align="left" valign="middle" width="1%">
+				<a href="#" onclick="font1()"><img alt="字級設定-小" border="0" src="../upload/cht/webstyle_default/word01.jpg" /></a></td>
+			<td align="left" valign="middle" width="1%">
+				<a href="#" onclick="font2()"><img alt="字級設定-中" border="0" src="../upload/cht/webstyle_default/word02.jpg" /></a></td>
+			<td align="left" valign="middle" width="1%">
+				<a href="#" onclick="font3()"><img alt="字級設定-大" border="0" src="../upload/cht/webstyle_default/word03.jpg" /></a></td>
+		</tr>
+	</tbody>
+</table>
+</td>
+					<td scope="col">&nbsp;
+						</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div id="title_list">
+		<table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tbody>
+				<tr>
+					<td scope="col" width="1%">
+						<img border="0" src="../upload/cht/webstyle_default/inicon_01.jpg" /></td>
+					<td class="titlestyle_b" scope="col">
+						<a href="index.php?">首頁</a> > 訂房流程</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div id="incontent_all">
+		<script>
+    $(function(){
+
+	$("#prev").click(function(){
+	
+		$("#myform").attr("action","index.php?act=resveration&code=step6");
+	
+	});
+        $("#next").click(function(){
+
+            document.myform.submit();
+	});
+	
+	
+});
+
+</script>
+<form action="index.php?act=resveration&amp;code=step8" id="myform" method="post" name="myform">
+	<table border="0" cellpadding="0" cellspacing="0">
+		<tbody>
+			<tr>
+				<td class="order_new_room_header" scope="col">
+					確認訂單</td>
+			</tr>
+			<tr>
+				<td align="middle" class="order_new_room_center" scope="row">
+					<table border="0" cellpadding="0" cellspacing="0" width="100%">
+						<tbody>
+							<tr>
+								<td align="middle" class="order_new_room_2" scope="col">
+									<table border="0" cellpadding="2" cellspacing="1" class="forbook_width">
+										<tbody>
+											<tr>
+												<td class="fotonlin_2" colspan="4" scope="col">
+													訂房明細</td>
+											</tr>
+											<tr>
+												<td align="left" class="fotonlin_4_2" colspan="4" scope="row">
+													<table border="0" cellpadding="2" cellspacing="1" width="100%">
+														<tbody>
+															<tr>
+																<td class="fotonlin_3_1" scope="row">
+																	日期</td>
+																<td class="fotonlin_3_1">
+																	假日</td>
+																<td class="fotonlin_3_1">
+																	客房型式</td>
+																<td class="fotonlin_3_1">
+																	費用</td>
+																<td class="fotonlin_3_1">
+																	訂金</td>
+																<td class="fotonlin_3_1">
+																	訂房數</td>
+															</tr>
+															
+															<tr class="mytr">
+																<td class="mytd" scope="row">
+																	2020-11-10(二)</td>
+																<td class="mytd">
+																	<font color="#ff0000">否</font></td>
+																<td class="mytd">
+																	松雪樓:4人套房</td>
+																<td class="mytd">
+																	NT$5400</td>
+																<td class="mytd">
+																	NT$1600</td>
+																<td class="mytd">
+																	1間</td>
+															</tr>
+															
+															<tr>
+																<td align="right" colspan="6">
+																	<font style="color: red">總費用：5400 訂金：1600</font></td>
+															</tr>
+															<tr>
+																<td align="middle" colspan="6">
+																	<input id="travel_card" name="travel_card" type="hidden" value="1" /></td>
+															</tr>
+															<tr>
+																<td align="left" colspan="6">
+																	<font style="color: red">　　</font></td>
+															</tr>
+														</tbody>
+													</table>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</td>
+							</tr>
+							<tr>
+								<td align="middle" class="order_new_room_2" scope="col">
+									<table border="0" cellpadding="2" cellspacing="1" class="forbook_width">
+										<tbody>
+											<tr>
+												<td class="fotonlin_2" colspan="4" scope="col">
+													備註 <!--(若使用國民旅遊卡，請於備註欄說明)--></td>
+											</tr>
+											<tr>
+												<td align="left" class="fotonlin_4_2" colspan="4" scope="row">
+													<textarea name="remarks" style="width: 100%; height: 150px"></textarea></td>
+											</tr>
+										</tbody>
+									</table>
+								</td>
+							</tr>
+							<tr>
+								<td align="middle" scope="row">
+									<input id="prev" src="../upload/cht/webstyle_default/order_new_icon_06.gif" type="image" value="上一步" />&nbsp;&nbsp;&nbsp;&nbsp; <input id="next" onclick="nextonclick();" src="../upload/cht/webstyle_default/order_new_icon_02.gif" type="image" value="確認訂房" /> <input id="load_gold" src="../upload/cht/webstyle_default/loading_gold.gif" style="width: 10%; display: none" type="image" value="load" /></td>
+							</tr>
+						</tbody>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td class="order_new_room_buttom" scope="row">
+					&nbsp;</td>
+			</tr>
+		</tbody>
+	</table>
+</form>
+<p>
+	&nbsp;</p>
+<script type="text/javascript">
+    $(document).ready(function () {
+        alert("請確認您的訂單明細後，並按下方『確認訂房』後，此單才算成立，並請至『會員專區』查詢您的訂單結果，謝謝!");
+    })
+</script></div>
+</div>
+</div>
+		<div id="footer">
+			<div class="footet_1">
+				<ul>
+                    <li>
+                        <a href="https://www.forest.gov.tw/privacy" tabindex="801" title="隱私權政策" target="_blank">隱私權政策</a></li>
+                    <li>
+                        ‧</li>
+                    <li>
+                        <a href="https://www.forest.gov.tw/security" tabindex="802" title="資訊安全政策" target="_blank">資訊安全政策</a></li>
+                    <li>
+                        ‧</li>
+					<!-- <li>
+						<a href="index.php?code=list&amp;ids=18" tabindex="803" title="著作權聲明">著作權聲明</a></li>
+					<li>
+						‧</li> -->
+					<li>
+						<a href="index.php?code=list&amp;ids=19" tabindex="804" title="聯絡資訊">聯絡資訊</a></li>
+					<li>
+						‧</li>
+					<li>
+						<a href="index.php?act=chief_mailbox" tabindex="805" title="意見信箱">意見信箱</a></li>
+					<li>
+						‧</li>
+					<li>
+						瀏覽人數:13403796</li>
+					<li>
+						‧</li>
+					<li>
+						【建議使用IE10.0 以上瀏覽器，最佳瀏覽解析度為 1024*768】</li>
+				</ul>
+			</div>
+			<br />
+			<span class="footer_2">東勢林區管理處遊客訂房服務中心 (04)25229696，傳真(04)25298083 &nbsp;&nbsp; 上班時間:星期一~星期五 上午8:00~12:00 下午13:00~17:00</span> <a href="http://www.webguide.nat.gov.tw/wSite/mp?mp=1" tabindex="806" target="_blank" title="無障礙網站"><img border="0" id="img3" name="img3" src="../upload/cht/webstyle_default/logo_03.png" /></a> <a href="http://www.gov.tw/" tabindex="807" target="_blank" title="政府入口網"><img border="0" id="img4" name="img4" src="../upload/cht/webstyle_default/logo_04.png" /></a></div>
+	</div>
+	<div id="flash">
+		<img src="../upload/cht/webstyle_default/101_forest_4.gif" style="width:1000px">
+    </div>
+</div>
+<p>
+	&nbsp;</p>
+
+
+
+<script language="javascript" src="../js/common.js?20190910"></script>
+<script>
+	//ShowTime();
+</script>
+</body>
+</html>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-56624466-4', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<!-- <div class="Img"><img style="top: 20%;position:  relative;" src="http://www.123booking.com.tw/demo/ch_test/fix.png"></div>
+<style type="text/css">.Img{
+	position: fixed;
+	z-index: 99999999;
+    width: 100%;
+    height:  100%;
+    top: 0;
+    background: #00000096;
+}</style> -->

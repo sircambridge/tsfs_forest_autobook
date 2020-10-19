@@ -40,6 +40,9 @@ build/Release
 # Dependency directories
 node_modules/
 jspm_packages/
+out/
+src/tmp3/
+src/tmp/
 
 # TypeScript v1 declaration files
 typings/
