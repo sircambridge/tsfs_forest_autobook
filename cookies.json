@@ -1,0 +1,46 @@
+[
+  {
+    "name": "_gid",
+    "value": "GA1.3.2016677329.1603317093",
+    "domain": ".forest.gov.tw",
+    "path": "/",
+    "expires": 1603411027,
+    "size": 31,
+    "httpOnly": false,
+    "secure": false,
+    "session": false
+  },
+  {
+    "name": "_gat",
+    "value": "1",
+    "domain": ".forest.gov.tw",
+    "path": "/",
+    "expires": 1603324673,
+    "size": 5,
+    "httpOnly": false,
+    "secure": false,
+    "session": false
+  },
+  {
+    "name": "PHPSESSID",
+    "value": "7l49vsu95famlc4legp77keo90",
+    "domain": "tsfs.forest.gov.tw",
+    "path": "/",
+    "expires": -1,
+    "size": 35,
+    "httpOnly": false,
+    "secure": false,
+    "session": true
+  },
+  {
+    "name": "_ga",
+    "value": "GA1.3.308796131.1602630276",
+    "domain": ".forest.gov.tw",
+    "path": "/",
+    "expires": 1666396627,
+    "size": 29,
+    "httpOnly": false,
+    "secure": false,
+    "session": false
+  }
+]

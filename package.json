@@ -16,6 +16,10 @@
     "name": "Gene Tsai",
     "email": "sircambridge@gmail.com"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sircambridge/tsfs_forest_autobook.git"
+  },
   "license": "MIT",
   "config": {
     "forge": {
@@ -46,10 +50,12 @@
   },
   "dependencies": {
     "electron-squirrel-startup": "^1.0.0",
+    "got": "^11.8.0",
     "node-fetch": "^2.6.1",
     "puppeteer": "^5.3.1",
     "tough-cookie": "^4.0.0",
-    "update-electron-app": "^2.0.1"
+    "update-electron-app": "^2.0.1",
+    "webhook-discord": "^3.7.7"
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.0.0-beta.53",

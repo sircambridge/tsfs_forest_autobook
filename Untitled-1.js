@@ -1,15 +1,21 @@
+// function pad(n) {
+//     return n < 10 ? '0' + n.toString(10) : n.toString(10);
+//   }
+//   function timestamp() {
+//     var d = new Date();
+//     var time = [pad(d.getHours()),
+//                 pad(d.getMinutes()),
+//                 pad(d.getSeconds())].join(':');
+//     return [d.getDate(), d.getMonth(), time].join(' ');
+//   }
+  
+  var old_log = console.log;
+  console.log = function() {
+    let new_args = Array.from(arguments);
+    var d = new Date();
+    new_args.unshift(`${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}`);
+    old_log.apply(null,new_args)
+  };
+  
 
-// let html = 'asdfasdfadsf<h6 class="date">2020/07/06</h6>asdfasddf'
-
-// let date = html.split('<h6 class="date">')
-
-// console.log(date)
-
-
-
-
-try {
-    console.log(1);
-} catch {
-    
-}
+  console.log('POOP');

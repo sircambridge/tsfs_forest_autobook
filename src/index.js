@@ -1,4 +1,4 @@
-require('update-electron-app')()
+// require('update-electron-app')()
 const { app, BrowserWindow } = require('electron');
 const path = require('path');
 
@@ -6,6 +6,29 @@ const path = require('path');
 if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
   app.quit();
 }
+
+require('update-electron-app')()
+
+const webhook = require("webhook-discord")
+ 
+const Hook = new webhook.Webhook("https://discord.com/api/webhooks/768619827732283402/WY98Oo2P7-pdOq-XVoyPJTGBLPLLJNzR5k1UDvgp6Y_ZL4i6-E75p2KyPUcrDKqm2zdg")
+var DiscordHook ={}
+for (const key of ['info','warn','err','success']) {
+  DiscordHook[key] = (a,b) => {
+    try {Hook[key](a,b.substring(0, 1024))} 
+    catch (error) {console.log(error)}
+  }
+}
+
+
+
+var old_log = console.log;
+console.log = function() {
+  let new_args = Array.from(arguments);
+  var d = new Date();
+  new_args.unshift(`${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}`);
+  old_log.apply(null,new_args)
+};
 
 var mainWindow = null;
 const createWindow = () => {
@@ -82,6 +105,22 @@ ipcMain.on('request-mainprocess-action', (event, arg) => {
   // main()
 });
 
+// const RemoteEval = class { 
+//   constructor() { 
+//     this.code = null; 
+//     this.resolver = null; 
+//     ipcMain.on('code', (event, arg) => {
+//       resolver(arg)
+//     });
+//   } 
+  
+//   run(code) { 
+//     new Promise(function(resolve, reject) {
+//       this.resolver = resolve;
+//       mainWindow.webContents.send('code', code);
+//     });
+//   } 
+// }; 
 let resolver = null;
 ipcMain.on('code', (event, arg) => {
   resolver(arg)
@@ -150,7 +189,8 @@ async function loggedin(params) {
   if(page.url().includes("code=step1")){
     return;
   }
-  label2.setText("登入成功!")
+  label2.setText("登入成功!");
+  DiscordHook.info("LOGIN","登入成功!");
   let cookies = await page.cookies('https://tsfs.forest.gov.tw/')
     fs.writeFileSync('./cookies.json', JSON.stringify(cookies, null, 2));
     for (var i = 0; i < cookies.length; i++) {
@@ -163,13 +203,28 @@ async function loggedin(params) {
 
 
 const fetchit = require('node-fetch');
-async function fetch(url,options,timeout=30000) {
+const got = require('got')
+async function fetch(url,options,timeout=5000) {
   console.log('fetch',url);
   options.headers['user-agent'] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.0 Safari/537.36"
   options.headers['cookie'] = await jar.getCookieString('https://tsfs.forest.gov.tw/')
   console.log("AFTER options.headers['cookie']", options.headers['cookie']);
   // options.headers['referer'] = options.referrer
-  response = await fetchit(url,options)
+  options.timeout = timeout;
+  options.retry = 3;
+  if(options.method == 'GET'){
+    delete options.body;
+  }
+  try {
+    response = await got(url,options)
+  } catch (error) {
+    console.log("ERROR",error);
+    DiscordHook.err("ERROR",error.stack.substring(0, 1024));
+  }
+  response.text = ()=>{
+    return response.body;
+  }
+  
   try{
     // console.log("response.headers.raw()['set-cookie']",response.headers.raw()['set-cookie']);
     let cookies = response.headers.raw()['set-cookie']
@@ -256,7 +311,7 @@ async function search() {
   if(m4){
     label2.setText(month+'/'+day+'/'+year+' '+m4[0]);
     try {
-      fs.writeFileSync('vacacy4.html',text);
+      fs.writeFileSync('vacacy4.html',html);
     } catch { }
     
     if(autobook){
@@ -264,17 +319,19 @@ async function search() {
       return
     }
   }
-  let m2 = text.match(/松雪樓:2人套房:[0-9]+間/g);
+  let m2 = text.match(/松雪樓:景觀2人:[0-9]+間/g);
   if(m2){
     label2.setText(month+'/'+day+'/'+year+' '+m2[0]);
     try {
-      fs.writeFileSync('vacacy2.html',text);
+      fs.writeFileSync('vacacy2.html',html);
     } catch { }
     if(autobook){
       await reserve1(month,day,year);
       return
     }
   }
+  // 松雪樓:景觀2人:17間<br />
+// 松雪樓:精緻冷杉林2人房:7間<br />
   // let m3 = text.match(/滑雪山莊:[0-9]+人/g);
   // if(m23){
   //   label2.setText(month+'/'+day+'/'+year+' '+m3[0])
@@ -292,14 +349,46 @@ async function search() {
     if(!bookSuccess){
       thetimeout = setTimeout(()=>{
         search()
-      },10000)
+      },3000)
     }
   }
   console.log(arguments);
 }
 
+async function step6({month,day,year}) {
+  let body = await fetch('https://tsfs.forest.gov.tw/cht/index.php?act=resveration&code=step6', {
+        method: 'POST',
+        headers: {
+            'Connection': 'keep-alive',
+            'Cache-Control': 'max-age=0',
+            'Upgrade-Insecure-Requests': '1',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.80 Safari/537.36 Edg/86.0.622.48',
+            'Origin': 'https://tsfs.forest.gov.tw',
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+            'Sec-Fetch-Site': 'same-origin',
+            'Sec-Fetch-Mode': 'navigate',
+            'Sec-Fetch-User': '?1',
+            'Sec-Fetch-Dest': 'document',
+            'Referer': 'https://tsfs.forest.gov.tw/cht/index.php?act=resveration&code=step5&year=2020&m=11',
+            'Accept-Language': 'en-US,en;q=0.9',
+            'Cookie': [
+                "_ga=GA1.3.94433970.1602145418",
+                "PHPSESSID=1v1olgcsqvik3t8gp2a0c453s5",
+                "_gid=GA1.3.310648609.1603317937",
+                "_gat=1"
+            ].join("; ")
+        },
+        body: [ `year=${year}`, `m=${month}`, "d%5B%5D=18", "x=99", "y=12" ].join("&")
+  });
+  
+  let html = await body.text();
+  fs.writeFileSync('step6.html',html);
+  
+}
 
 async function reserve1(month,day,year) {
+  await step6({month,day,year})
   label3.setText('訂房中...');
   let postbody = [
     encodeURIComponent(`room_nums[${year}-${month}-${day}][110]`)+"=1",   
@@ -457,12 +546,7 @@ async function submitTOS(argument) {
   let html = await body.text()
 
 }
-async function new_func(argument) {
-  let body = await null
-  let html = await body.text()
-  let json = JSON.parse(html)
-  return json
-}
+
 async function new_func(argument) {
   let body = await null
   let html = await body.text()
