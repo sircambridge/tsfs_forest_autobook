@@ -49,6 +49,8 @@
     }
   },
   "dependencies": {
+    "2captcha-node": "^2.2.0",
+    "electron-prompt": "^1.6.0",
     "electron-squirrel-startup": "^1.0.0",
     "got": "^11.8.0",
     "node-fetch": "^2.6.1",

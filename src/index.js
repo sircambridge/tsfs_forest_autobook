@@ -2,6 +2,8 @@
 const { app, BrowserWindow } = require('electron');
 const path = require('path');
 
+const sleep = require('util').promisify(setTimeout)
+
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
   app.quit();
@@ -97,7 +99,8 @@ const {ipcMain} = require('electron');
 ipcMain.on('request-mainprocess-action', (event, arg) => {
   console.log(arg);
   if(arg.message == 'login'){
-    login()
+    // login()
+    login2Captcha();
   }
   if(arg.message == 'search'){
     search(arg.someData)
@@ -148,6 +151,7 @@ var bookSuccess = false;
 let browser = null;
 let page = null;
 async function login(params) {
+
   browser = await puppeteer.launch({ 
     headless: false,
     userDataDir: __dirname +'/tmp3',
@@ -175,6 +179,137 @@ async function login(params) {
 
 }
 
+const util = require('util');
+const streamPipeline = util.promisify(require('stream').pipeline);
+const https = require('https');
+
+const httpsAgent = new https.Agent({ rejectUnauthorized: false });
+
+let captchaSolver = require('2captcha-node').default;
+const captcha = captchaSolver('9454f461be566d83a812fefdeeddb2cf');
+const prompt = require('electron-prompt');
+
+// https://www.liquidweb.com/kb/dns-hosts-file/
+async function login2Captcha() {
+  let username_params = {
+    title: '', label: '帳號:', value: '',
+    inputAttrs: { type: 'text' },
+    type: 'input'
+  };
+  let password_params = {
+    title: '', label: '密碼:', value: '',
+    inputAttrs: { type: 'password' },
+    type: 'input'
+  };
+  
+  if(__dirname.includes('gene')){
+    username_params.value = 'sircambrid';
+    password_params.value = 'NEGFbdjz9978';
+    browser = await puppeteer.launch({ 
+      headless: true,
+      userDataDir: "C:\\Users\\gene\\AppData\\Local\\Google\\Chrome\\User Data",
+      executablePath:"C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe"
+    });
+  }else{
+    browser = await puppeteer.launch({ 
+      headless: true, userDataDir: __dirname +'/tmp3',
+    });
+  }
+  let username = await prompt(username_params);
+  let password = await prompt(password_params);
+  
+  label2.setText("登入中...");
+  page = await browser.newPage();
+  page.on('dialog', async dialog => {
+    console.log(dialog.message());
+    await dialog.dismiss();
+  });
+  // await page.setViewport({ width: 1000, height: 1000 });
+  // await page.setRequestInterception(true);
+
+  await page.goto("https://tsfs.forest.gov.tw/cht/index.php?act=resveration&code=step1", { waitUntil: 'networkidle2' })
+  
+  let cookies = await page.cookies('https://tsfs.forest.gov.tw/')
+  fs.writeFileSync('./cookies.json', JSON.stringify(cookies, null, 2));
+  for (var i = 0; i < cookies.length; i++) {
+    jar.setCookie(`${cookies[i].name}=${cookies[i].value}; path=/; Secure`,'https://tsfs.forest.gov.tw/',{secure:true})
+  }
+    // await sleep(1000)
+  await browser.close();
+  // await submitTOS();
+  label2.setText("辯識驗證碼...");
+  let response = await fetchit('https://tsfs.forest.gov.tw/cht/index.php?act=verify', {
+      headers: {
+          'Connection': 'keep-alive',
+          'Cache-Control': 'max-age=0',
+          'Upgrade-Insecure-Requests': '1',
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36 Edg/86.0.622.51',
+          'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+          'Sec-Fetch-Site': 'none',
+          'Sec-Fetch-Mode': 'navigate',
+          'Sec-Fetch-User': '?1',
+          'Sec-Fetch-Dest': 'document',
+          'Accept-Language': 'en-US,en;q=0.9',
+          'Cookie': (await jar.getCookieString('https://tsfs.forest.gov.tw/'))
+      },
+      agent: httpsAgent
+  });
+  const fname = 'octocat.png';
+  fs.unlinkSync(fname)
+  if (response.ok) {
+    streamPipeline(response.body, fs.createWriteStream(fname));
+  }
+  await sleep(1000);
+  
+  const contents = fs.readFileSync(fname, {encoding: 'base64'});
+
+  const options = {
+    image: contents,
+    maxAttempts: 60, // Optional
+  }; 
+
+  const balance = await captcha.balance();
+
+  console.log('solving...',balance);
+  const { id, text } = await captcha.solve(options);
+  console.log('solved!', { id, text });
+  label2.setText("驗證碼="+text);
+  // let html = await body.text()
+  // let json = JSON.parse(html)
+  // return json
+  let response2 = await fetch('https://tsfs.forest.gov.tw/cht/index.php?act=resveration&code=step2', {
+    method: 'POST',
+    headers: {
+        'Connection': 'keep-alive',
+        'Cache-Control': 'max-age=0',
+        'Upgrade-Insecure-Requests': '1',
+        'Origin': 'https://tsfs.forest.gov.tw',
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36 Edg/86.0.622.51',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+        'Sec-Fetch-Site': 'same-origin',
+        'Sec-Fetch-Mode': 'navigate',
+        'Sec-Fetch-User': '?1',
+        'Sec-Fetch-Dest': 'document',
+        'Referer': 'https://tsfs.forest.gov.tw/cht/index.php?act=resveration&code=step1',
+        'Accept-Language': 'en-US,en;q=0.9',
+    },
+    body: [
+        "user="+username,
+        "password="+password,
+        "verifycode="+text,
+        "verifycode_confirm="
+    ].join("&"),
+  });
+
+  label2.setText("登入成功!");
+  DiscordHook.info("LOGIN","登入成功!");
+
+  let html2 = await response2.text();
+  fs.writeFileSync('login.html',html2);
+  await submitTOS();
+}
+
 
 //您的帳號為：
 // sircambrid
@@ -192,10 +327,10 @@ async function loggedin(params) {
   label2.setText("登入成功!");
   DiscordHook.info("LOGIN","登入成功!");
   let cookies = await page.cookies('https://tsfs.forest.gov.tw/')
-    fs.writeFileSync('./cookies.json', JSON.stringify(cookies, null, 2));
-    for (var i = 0; i < cookies.length; i++) {
-      jar.setCookie(`${cookies[i].name}=${cookies[i].value}; path=/; Secure`,'https://tsfs.forest.gov.tw/',{secure:true})
-    }
+  fs.writeFileSync('./cookies.json', JSON.stringify(cookies, null, 2));
+  for (var i = 0; i < cookies.length; i++) {
+    jar.setCookie(`${cookies[i].name}=${cookies[i].value}; path=/; Secure`,'https://tsfs.forest.gov.tw/',{secure:true})
+  }
     // await sleep(1000)
   await browser.close();
   await submitTOS();
@@ -212,6 +347,8 @@ async function fetch(url,options,timeout=5000) {
   // options.headers['referer'] = options.referrer
   options.timeout = timeout;
   options.retry = 3;
+
+  options.rejectUnauthorized = false;
   if(options.method == 'GET'){
     delete options.body;
   }
@@ -223,6 +360,10 @@ async function fetch(url,options,timeout=5000) {
   }
   response.text = ()=>{
     return response.body;
+  }
+
+  if(options.log_to_disk){
+    fs.writeFileSync(options.log_to_disk,response.body)
   }
   
   try{
@@ -256,11 +397,17 @@ async function search() {
     year: document.querySelector('#year').value,
     month: document.querySelector('#month').value,
     day: document.querySelector('#day').value,
+    count: document.querySelector('#count').value,
     autobook: document.querySelector('#autobook').checked,
     retry: document.querySelector('#retry').checked,
   }; r`);
-  year = res.year; month = res.month; day = res.day; autobook = res.autobook; retry = res.retry;
-  console.log({day,month,year,autobook,retry});
+  let year = res.year; 
+  let month = res.month; 
+  let day = res.day; 
+  let count = res.count;
+  let autobook = res.autobook; 
+  let retry = res.retry;
+  console.log({day,month,year,count,autobook,retry});
   // let year = dateEdit.date().year();
   // let month = dateEdit.date().month();
   // let day = dateEdit.date().day();
@@ -315,7 +462,7 @@ async function search() {
     } catch { }
     
     if(autobook){
-      await reserve1(month,day,year);
+      await reserve1(month,day,year,count);
       return
     }
   }
@@ -326,7 +473,7 @@ async function search() {
       fs.writeFileSync('vacacy2.html',html);
     } catch { }
     if(autobook){
-      await reserve1(month,day,year);
+      await reserve1(month,day,year,count);
       return
     }
   }
@@ -387,11 +534,12 @@ async function step6({month,day,year}) {
   
 }
 
-async function reserve1(month,day,year) {
+async function reserve1(month,day,year, count ='1') {
   await step6({month,day,year})
   label3.setText('訂房中...');
   let postbody = [
-    encodeURIComponent(`room_nums[${year}-${month}-${day}][110]`)+"=1",   
+    // encodeURIComponent(`room_nums[${year}-${month}-${day}][110]`)+"=1",   
+    encodeURIComponent(`room_nums[${year}-${month}-${day}][110]`)+"="+count,   
     encodeURIComponent(`room_nums[${year}-${month}-${day}][116]`)+"=0", 
     "x=93",
      "y=14"
@@ -413,7 +561,7 @@ async function reserve1(month,day,year) {
       "referrer": "https://tsfs.forest.gov.tw/cht/index.php?act=resveration&code=step6",
       "referrerPolicy": "no-referrer-when-downgrade",
       "body":postbody,
-      "body": "room_nums%5B2020-10-28%5D%5B110%5D=1&room_nums%5B2020-10-28%5D%5B116%5D=0&x=93&y=14",
+      // "body": "room_nums%5B2020-10-28%5D%5B110%5D=1&room_nums%5B2020-10-28%5D%5B116%5D=0&x=93&y=14",
       "method": "POST",
       "mode": "cors"
     });
@@ -451,41 +599,6 @@ async function reserveconfirm(argument) {
   // return json
 }
 
-async function reserve3(month,day,year) {
-  label3.setText('訂房中...');
-  let postbody = [
-    encodeURIComponent(`room_nums[${year}-${month}-${day}][110]`)+"=0", 
-    encodeURIComponent(`room_nums[${year}-${month}-${day}][116]`)+"=1", 
-    "x=93",
-     "y=14"
-    ].join('&')
-  console.log('reserve3', postbody);
-  let body = await fetch("https://tsfs.forest.gov.tw/cht/index.php?act=resveration&code=step7", {
-      "headers": {
-        "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
-        "accept-language": "en-US,en;q=0.9",
-        "cache-control": "max-age=0",
-        "content-type": "application/x-www-form-urlencoded",
-        "sec-fetch-dest": "document",
-        "sec-fetch-mode": "navigate",
-        "sec-fetch-site": "same-origin",
-        "sec-fetch-user": "?1",
-        "upgrade-insecure-requests": "1",
-        "cookie": "_ga=GA1.3.94433970.1602145418; _gid=GA1.3.301950299.1602145418; PHPSESSID=8ukfbqgducqctcqkut3s15g4a5"
-      },
-      "referrer": "https://tsfs.forest.gov.tw/cht/index.php?act=resveration&code=step6",
-      "referrerPolicy": "no-referrer-when-downgrade",
-      "body":postbody,
-      // "body": "room_nums%5B2020-10-28%5D%5B110%5D=1&room_nums%5B2020-10-28%5D%5B116%5D=0&x=93&y=14",
-      "method": "POST",
-      "mode": "cors"
-    });
-  let html = await body.text()
-  fs.writeFileSync('reserve3.html',html)
-  await reserveconfirm()
-  // let json = JSON.parse(html)
-  // return json
-}
 
 async function submitTOS(argument) {
   let body = await fetch("https://tsfs.forest.gov.tw/cht/index.php?act=resveration&code=step1", {
@@ -557,5 +670,6 @@ async function new_func(argument) {
 (async function go(){
   await read_cookies();
 
+  // await login2Captcha()
   // await search(2020,11,11);
 })()
