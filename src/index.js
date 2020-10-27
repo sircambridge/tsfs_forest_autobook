@@ -346,7 +346,7 @@ async function login2Captcha() {
   }else if(html2.includes('首次登入')){
     label2.setText("帳號錯誤!");
     DiscordHook.info("LOGIN","帳號錯誤!");
-    
+
   }else{
     label2.setText("登入成功!");
     DiscordHook.info("LOGIN","登入成功!");
@@ -632,8 +632,10 @@ async function reserveconfirm(argument) {
     "mode": "cors"
   });
   let html = await body.text()
+  if(html.includes('訂購失敗')){
+    label3.setText('訂購失敗!!!!')
+  }
   fs.writeFileSync('reserveconfirm.html',html)
-  label3.setText('訂房成功!!!!')
   bookSuccess=true;
   // let json = JSON.parse(html)
   // return json
