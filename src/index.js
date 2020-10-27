@@ -339,11 +339,14 @@ async function login2Captcha() {
 
   let html2 = await response2.text();
   fs.writeFileSync('login.html',html2);
-
   if(html2.includes('密碼錯誤')){
-    // alert('密碼錯誤')
     label2.setText("密碼錯誤!");
     DiscordHook.info("LOGIN","密碼錯誤!");
+
+  }else if(html2.includes('首次登入')){
+    label2.setText("帳號錯誤!");
+    DiscordHook.info("LOGIN","帳號錯誤!");
+    
   }else{
     label2.setText("登入成功!");
     DiscordHook.info("LOGIN","登入成功!");
