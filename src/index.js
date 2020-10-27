@@ -105,6 +105,9 @@ ipcMain.on('request-mainprocess-action', (event, arg) => {
   if(arg.message == 'search'){
     search(arg.someData)
   }
+  if(arg.message == 'popout'){
+    popout(arg.someData)
+  }
   // main()
 });
 
@@ -179,6 +182,23 @@ async function login(params) {
 
 }
 
+async function popout(params) {
+  if(__dirname.includes('gene')){
+    browser = await puppeteer.launch({ 
+      headless: false,
+      userDataDir: "C:\\Users\\gene\\AppData\\Local\\Google\\Chrome\\User Data",
+      executablePath:"C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe"
+    });
+  }else{
+    browser = await puppeteer.launch({ 
+      headless: false, userDataDir: __dirname +'/tmp3',
+    });
+  }
+  page = await browser.newPage();
+  await page.goto("https://tsfs.forest.gov.tw/cht/index.php?", { waitUntil: 'networkidle2' })
+
+}
+
 const util = require('util');
 const streamPipeline = util.promisify(require('stream').pipeline);
 const https = require('https');
@@ -189,15 +209,17 @@ let captchaSolver = require('2captcha-node').default;
 const captcha = captchaSolver('9454f461be566d83a812fefdeeddb2cf');
 const prompt = require('electron-prompt');
 
+let username_memory = '';
+let password_memory = '';
 // https://www.liquidweb.com/kb/dns-hosts-file/
 async function login2Captcha() {
   let username_params = {
-    title: '', label: '帳號:', value: '',
+    title: '', label: '帳號:', value: username_memory,
     inputAttrs: { type: 'text' },
     type: 'input'
   };
   let password_params = {
-    title: '', label: '密碼:', value: '',
+    title: '', label: '密碼:', value: password_memory,
     inputAttrs: { type: 'password' },
     type: 'input'
   };
@@ -215,10 +237,21 @@ async function login2Captcha() {
       headless: true, userDataDir: __dirname +'/tmp3',
     });
   }
-  let username = await prompt(username_params);
-  let password = await prompt(password_params);
+  var username = await prompt(username_params);
   
-  label2.setText("登入中...");
+  if(username){
+    var password = await prompt(password_params);
+  }
+  console.log({username,password});
+  if(username && password){
+    label2.setText("登入中...");
+  }else{
+    return;
+  }
+  
+  username_memory = username;
+  password_memory = password;
+  
   page = await browser.newPage();
   page.on('dialog', async dialog => {
     console.log(dialog.message());
@@ -302,12 +335,22 @@ async function login2Captcha() {
     ].join("&"),
   });
 
-  label2.setText("登入成功!");
-  DiscordHook.info("LOGIN","登入成功!");
+
 
   let html2 = await response2.text();
   fs.writeFileSync('login.html',html2);
-  await submitTOS();
+
+  if(html2.includes('密碼錯誤')){
+    // alert('密碼錯誤')
+    label2.setText("密碼錯誤!");
+    DiscordHook.info("LOGIN","密碼錯誤!");
+  }else{
+    label2.setText("登入成功!");
+    DiscordHook.info("LOGIN","登入成功!");
+    await submitTOS();
+  }
+  
+  
 }
 
 
@@ -519,12 +562,6 @@ async function step6({month,day,year}) {
             'Sec-Fetch-Dest': 'document',
             'Referer': 'https://tsfs.forest.gov.tw/cht/index.php?act=resveration&code=step5&year=2020&m=11',
             'Accept-Language': 'en-US,en;q=0.9',
-            'Cookie': [
-                "_ga=GA1.3.94433970.1602145418",
-                "PHPSESSID=1v1olgcsqvik3t8gp2a0c453s5",
-                "_gid=GA1.3.310648609.1603317937",
-                "_gat=1"
-            ].join("; ")
         },
         body: [ `year=${year}`, `m=${month}`, "d%5B%5D=18", "x=99", "y=12" ].join("&")
   });

@@ -15,6 +15,10 @@ window.addEventListener('DOMContentLoaded', () => {
       login();
     })
 
+    document.querySelector('#popout').addEventListener('click', () => {
+      popout();
+    })
+
     document.querySelector('#search').addEventListener('click', () => {
       search();
     })
@@ -36,6 +40,19 @@ window.addEventListener('DOMContentLoaded', () => {
       // will react to the request !
       ipcRenderer.send('request-mainprocess-action', Data);
   }
+function popout() {
+    // Some data that will be sent to the main process
+  let Data = {
+      message: "popout",
+      someData: {}
+  };
+  // alert(1)
+  console.log("SENDING");
+  // Send information to the main process
+  // if a listener has been set, then the main process
+  // will react to the request !
+  ipcRenderer.send('request-mainprocess-action', Data);
+}
 
   function search() {
     // Some data that will be sent to the main process
